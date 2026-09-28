@@ -1,0 +1,39 @@
+<header class="section-head">
+  <div>
+    <h2>Sujets proposés</h2>
+    <p>Choisissez un sujet ouvert puis candidatez via le formulaire dédié.</p>
+  </div>
+  <div class="filters" role="group" aria-label="Filtrer les sujets">
+    <button type="button" class="filter-btn" [class.active]="showOpenOnly()" (click)="toggleFilter(true)">
+      Ouverts uniquement
+    </button>
+    <button type="button" class="filter-btn" [class.active]="!showOpenOnly()" (click)="toggleFilter(false)">
+      Tous les sujets
+    </button>
+  </div>
+</header>
+
+<div class="topic-list">
+  @for (topic of topics(); track topic.id) {
+    <article class="topic-card">
+      <header>
+        <h3>{{ topic.title }}</h3>
+        <span class="badge" [class.open]="topic.status === 'OPEN'">{{ topic.status | pfeStatusLabel }}</span>
+      </header>
+      <p class="description">{{ topic.description }}</p>
+      <dl class="meta">
+        <div><dt>Domaine</dt><dd>{{ topic.domain }}</dd></div>
+        <div><dt>Technologies</dt><dd>{{ topic.technologies }}</dd></div>
+        <div><dt>Encadrant</dt><dd>{{ topic.supervisorName }}</dd></div>
+        <div><dt>Places</dt><dd>{{ topic.applicationCount }} / {{ topic.maxCandidates }} candidatures</dd></div>
+      </dl>
+      @if (topic.status === 'OPEN') {
+        <a [routerLink]="['/pfe/candidature']" [queryParams]="{ topicId: topic.id }" class="btn btn-primary">
+          Postuler à ce sujet
+        </a>
+      }
+    </article>
+  } @empty {
+    <p class="empty">Aucun sujet disponible pour ce filtre.</p>
+  }
+</div>

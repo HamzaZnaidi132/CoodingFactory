@@ -1,0 +1,52 @@
+<header class="chat-head">
+  <h1>Assistant consulting</h1>
+  <p>Oriente automatiquement vers le service le plus adapté à votre besoin.</p>
+</header>
+
+<div class="layout">
+  <aside class="catalog">
+    <h2>Offres consulting</h2>
+    @for (service of services(); track service.code) {
+      <article>
+        <h3>{{ service.title }}</h3>
+        <p>{{ service.description }}</p>
+        <small>{{ service.contactEmail }}</small>
+      </article>
+    }
+  </aside>
+
+  <section class="chat">
+    <div class="messages">
+      @for (msg of messages(); track $index) {
+        <div class="bubble" [class.user]="msg.author === 'user'" [class.bot]="msg.author === 'bot'">
+          <p>{{ msg.text }}</p>
+          @if (msg.serviceTitle) {
+            <span class="badge">Recommandation : {{ msg.serviceTitle }}</span>
+          }
+        </div>
+      }
+      @if (loading()) {
+        <div class="bubble bot loading">Analyse en cours...</div>
+      }
+    </div>
+
+    @if (suggestions().length) {
+      <div class="suggestions">
+        @for (question of suggestions(); track question) {
+          <button type="button" (click)="useSuggestion(question)">{{ question }}</button>
+        }
+      </div>
+    }
+
+    <form class="composer" (ngSubmit)="sendMessage()">
+      <input
+        type="text"
+        [(ngModel)]="draft"
+        name="draft"
+        placeholder="Ex. Nous voulons migrer vers le cloud et automatiser le déploiement"
+        autocomplete="off"
+      />
+      <button type="submit" [disabled]="loading()">Envoyer</button>
+    </form>
+  </section>
+</div>

@@ -1,0 +1,35 @@
+<div class="shell">
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a routerLink="/" class="brand">
+        <span class="brand__mark">CF</span>
+        <span>CodingFactory</span>
+      </a>
+      <nav aria-label="Navigation principale">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Accueil</a>
+        <a routerLink="/consulting/chatbot" routerLinkActive="active">Consulting</a>
+        @if (roleService.currentRole() === 'candidat') {
+          <a routerLink="/pfe" routerLinkActive="active">Espace candidat PFE</a>
+        }
+        @if (roleService.currentRole() === 'admin') {
+          <a routerLink="/admin" routerLinkActive="active">Administration PFE</a>
+        }
+      </nav>
+      <button class="role-toggle" (click)="roleService.toggle()" id="role-toggle-btn">
+        <span class="role-toggle__icon">{{ roleService.currentRole() === 'admin' ? '🛡️' : '👤' }}</span>
+        <span class="role-toggle__label">{{ roleService.currentRole() === 'admin' ? 'Admin' : 'Candidat' }}</span>
+        <span class="role-toggle__switch" [class.admin]="roleService.currentRole() === 'admin'">
+          <span class="role-toggle__dot"></span>
+        </span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <router-outlet />
+  </main>
+
+  <footer class="footer">
+    <p>© CodingFactory — Consulting, formation &amp; accompagnement PFE</p>
+  </footer>
+</div>

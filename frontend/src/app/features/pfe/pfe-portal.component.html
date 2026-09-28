@@ -1,0 +1,28 @@
+<section class="portal-grid">
+  <article class="stat-card">
+    <span class="stat-value">{{ openTopics() }}</span>
+    <span class="stat-label">Sujets ouverts</span>
+  </article>
+  <article class="stat-card">
+    <span class="stat-value">{{ projectsCount() }}</span>
+    <span class="stat-label">Projets réalisés consultables</span>
+  </article>
+</section>
+
+<section class="access-cards">
+  <article>
+    <h2>Explorer les sujets</h2>
+    <p>Parcourez les thématiques, technologies et encadrants avant de postuler.</p>
+    <a routerLink="/pfe/sujets" class="btn btn-primary">Voir les sujets</a>
+  </article>
+  <article>
+    <h2>Projets réalisés</h2>
+    <p>Accédez aux études de cas, méthodologies et résultats des anciens PFE.</p>
+    <a routerLink="/pfe/projets" class="btn btn-primary">Voir les projets</a>
+  </article>
+  <article>
+    <h2>Déposer une candidature</h2>
+    <p>Formulaire structuré avec validation pour postuler au sujet de votre choix.</p>
+    <a routerLink="/pfe/candidature" class="btn btn-secondary">Candidater</a>
+  </article>
+</section>

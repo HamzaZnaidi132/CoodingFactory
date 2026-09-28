@@ -1,0 +1,104 @@
+<div class="section-header">
+  <h2>Sujets PFE</h2>
+  <button class="btn btn-primary" (click)="openCreateForm()" id="btn-add-topic">
+    + Nouveau sujet
+  </button>
+</div>
+
+@if (message()) {
+  <p class="alert success" role="status">{{ message() }}</p>
+}
+@if (error()) {
+  <p class="alert error" role="alert">{{ error() }}</p>
+}
+
+@if (showForm()) {
+  <div class="form-overlay" (click)="cancelForm()">
+    <div class="form-modal" (click)="$event.stopPropagation()">
+      <div class="form-modal__header">
+        <h3>{{ editing() ? 'Modifier le sujet' : 'Nouveau sujet PFE' }}</h3>
+        <button class="close-btn" (click)="cancelForm()" aria-label="Fermer">✕</button>
+      </div>
+      <form [formGroup]="topicForm" (ngSubmit)="submitForm()" novalidate>
+        <div class="field">
+          <label for="title">Titre *</label>
+          <input id="title" type="text" formControlName="title" [class.invalid]="invalid('title')" />
+        </div>
+        <div class="field">
+          <label for="description">Description *</label>
+          <textarea id="description" rows="4" formControlName="description" [class.invalid]="invalid('description')"></textarea>
+        </div>
+        <div class="field-grid">
+          <div class="field">
+            <label for="domain">Domaine *</label>
+            <input id="domain" type="text" formControlName="domain" [class.invalid]="invalid('domain')" />
+          </div>
+          <div class="field">
+            <label for="technologies">Technologies *</label>
+            <input id="technologies" type="text" formControlName="technologies" [class.invalid]="invalid('technologies')" />
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field">
+            <label for="supervisorName">Encadrant *</label>
+            <input id="supervisorName" type="text" formControlName="supervisorName" [class.invalid]="invalid('supervisorName')" />
+          </div>
+          <div class="field">
+            <label for="status">Statut *</label>
+            <select id="status" formControlName="status">
+              @for (s of statusOptions; track s) {
+                <option [value]="s">{{ statusLabel(s) }}</option>
+              }
+            </select>
+          </div>
+        </div>
+        <div class="field" style="max-width: 200px">
+          <label for="maxCandidates">Max candidats *</label>
+          <input id="maxCandidates" type="number" min="1" formControlName="maxCandidates" />
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="cancelForm()">Annuler</button>
+          <button type="submit" class="btn btn-primary">
+            {{ editing() ? 'Enregistrer' : 'Créer le sujet' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+@if (loading()) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Chargement…</p>
+  </div>
+} @else if (topics().length === 0) {
+  <div class="empty-state">
+    <p>Aucun sujet PFE pour le moment.</p>
+    <button class="btn btn-primary" (click)="openCreateForm()">Créer le premier sujet</button>
+  </div>
+} @else {
+  <div class="cards-grid">
+    @for (topic of topics(); track topic.id) {
+      <div class="topic-card">
+        <div class="topic-card__header">
+          <span class="status-badge" [class]="'status-badge--' + topic.status.toLowerCase()">
+            {{ statusLabel(topic.status) }}
+          </span>
+          <span class="topic-card__apps">{{ topic.applicationCount }} candidature(s)</span>
+        </div>
+        <h3 class="topic-card__title">{{ topic.title }}</h3>
+        <p class="topic-card__desc">{{ topic.description | slice:0:120 }}{{ topic.description.length > 120 ? '…' : '' }}</p>
+        <div class="topic-card__meta">
+          <span>🏷️ {{ topic.domain }}</span>
+          <span>⚙️ {{ topic.technologies }}</span>
+          <span>👤 {{ topic.supervisorName }}</span>
+        </div>
+        <div class="topic-card__actions">
+          <button class="btn btn-secondary btn-sm" (click)="openEditForm(topic)">✏️ Modifier</button>
+          <button class="btn btn-danger btn-sm" (click)="deleteTopic(topic)">🗑️ Supprimer</button>
+        </div>
+      </div>
+    }
+  </div>
+}

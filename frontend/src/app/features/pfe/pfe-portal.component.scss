@@ -1,0 +1,56 @@
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.stat-card {
+  background: #fff;
+  border: 1px solid var(--cf-border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: var(--cf-shadow);
+}
+
+.stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--cf-teal-dark);
+}
+
+.stat-label {
+  color: var(--cf-muted);
+  font-size: 0.9rem;
+}
+
+.access-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.access-cards article {
+  background: #fff;
+  border: 1px solid var(--cf-border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.access-cards h2 {
+  font-size: 1.1rem;
+}
+
+.access-cards p {
+  color: var(--cf-muted);
+  flex: 1;
+  margin: 0;
+}
+
+.access-cards .btn {
+  align-self: flex-start;
+}

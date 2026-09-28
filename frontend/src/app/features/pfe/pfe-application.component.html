@@ -1,0 +1,126 @@
+<header class="section-head">
+  <div>
+    <h2>Formulaire de candidature</h2>
+    <p>Remplissez chaque section avec des informations claires. Les champs marqués * sont obligatoires.</p>
+  </div>
+</header>
+
+<div class="form-layout">
+  <form class="application-form" [formGroup]="applicationForm" (ngSubmit)="submitApplication()" novalidate>
+    <fieldset>
+      <legend>1. Choix du sujet *</legend>
+      <div class="field">
+        <label for="topicId">Sujet de PFE</label>
+        <select id="topicId" formControlName="topicId" [class.invalid]="invalid('topicId')">
+          <option [ngValue]="null">— Sélectionnez un sujet ouvert —</option>
+          @for (topic of topics(); track topic.id) {
+            <option [ngValue]="topic.id">{{ topic.title }}</option>
+          }
+        </select>
+        @if (invalid('topicId')) {
+          <span class="field-error">{{ errorText('topicId') }}</span>
+        }
+      </div>
+    </fieldset>
+
+    @if (selectedTopic(); as topic) {
+      <aside class="topic-preview" aria-live="polite">
+        <h3>Sujet sélectionné</h3>
+        <p><strong>{{ topic.title }}</strong></p>
+        <p>{{ topic.description }}</p>
+        <p class="hint">{{ topic.technologies }} · Encadrant : {{ topic.supervisorName }}</p>
+      </aside>
+    }
+
+    <fieldset>
+      <legend>2. Identité *</legend>
+      <div class="field-grid">
+        <div class="field">
+          <label for="fullName">Nom complet</label>
+          <input id="fullName" type="text" formControlName="fullName" autocomplete="name" [class.invalid]="invalid('fullName')" />
+          @if (invalid('fullName')) {
+            <span class="field-error">{{ errorText('fullName') }}</span>
+          }
+        </div>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input id="email" type="email" formControlName="email" autocomplete="email" [class.invalid]="invalid('email')" />
+          @if (invalid('email')) {
+            <span class="field-error">{{ errorText('email') }}</span>
+          }
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>3. Parcours académique *</legend>
+      <div class="field-grid">
+        <div class="field">
+          <label for="school">Établissement</label>
+          <input id="school" type="text" formControlName="school" [class.invalid]="invalid('school')" />
+          @if (invalid('school')) {
+            <span class="field-error">{{ errorText('school') }}</span>
+          }
+        </div>
+        <div class="field">
+          <label for="level">Niveau d'études</label>
+          <select id="level" formControlName="level" [class.invalid]="invalid('level')">
+            <option value="">— Choisir —</option>
+            @for (level of levelOptions; track level) {
+              <option [value]="level">{{ level }}</option>
+            }
+          </select>
+          @if (invalid('level')) {
+            <span class="field-error">{{ errorText('level') }}</span>
+          }
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>4. Motivation *</legend>
+      <div class="field">
+        <label for="motivation">Pourquoi ce sujet vous intéresse (min. 50 caractères)</label>
+        <textarea id="motivation" rows="7" formControlName="motivation" [class.invalid]="invalid('motivation')"></textarea>
+        <div class="field-meta">
+          <span class="hint">Décrivez vos compétences, disponibilités et objectifs professionnels.</span>
+          <span class="counter">{{ motivationLength() }} / 3000</span>
+        </div>
+        @if (invalid('motivation')) {
+          <span class="field-error">{{ errorText('motivation') }}</span>
+        }
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>5. Portfolio (optionnel)</legend>
+      <div class="field">
+        <label for="portfolioUrl">Lien GitHub, LinkedIn ou portfolio</label>
+        <input id="portfolioUrl" type="url" formControlName="portfolioUrl" placeholder="https://github.com/votre-profil" />
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <button type="submit" class="btn btn-primary" [disabled]="submitting()">
+        {{ submitting() ? 'Envoi en cours…' : 'Envoyer ma candidature' }}
+      </button>
+    </div>
+
+    @if (submitMessage()) {
+      <p class="alert success" role="status">{{ submitMessage() }}</p>
+    }
+    @if (submitError()) {
+      <p class="alert error" role="alert">{{ submitError() }}</p>
+    }
+  </form>
+
+  <aside class="help-panel">
+    <h3>Conseils candidat</h3>
+    <ul>
+      <li>Consultez d'abord les <strong>projets réalisés</strong> pour comprendre le niveau attendu.</li>
+      <li>Choisissez un sujet aligné avec vos compétences techniques.</li>
+      <li>Rédigez une motivation concrète (contexte, méthode, livrables visés).</li>
+    </ul>
+    <p class="hint">Besoin d'inspiration ? Parcourez la section projets avant de candidater.</p>
+  </aside>
+</div>

@@ -1,0 +1,21 @@
+<section class="pfe-hero">
+  <div class="pfe-hero__content">
+    <p class="page-eyebrow">Espace candidat</p>
+    <h1 class="page-title">Projets de fin d'études</h1>
+    <p class="page-lead">
+      Consultez les sujets proposés, découvrez les réalisations passées et déposez votre candidature en toute simplicité.
+    </p>
+  </div>
+</section>
+
+<nav class="pfe-nav" aria-label="Navigation PFE candidat">
+  <a routerLink="/pfe" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Vue d'ensemble</a>
+  <a routerLink="/pfe/sujets" routerLinkActive="active">Sujets proposés</a>
+  <a routerLink="/pfe/projets" routerLinkActive="active">Projets réalisés</a>
+  <a routerLink="/pfe/recommandations" routerLinkActive="active">🤖 Recommandations IA</a>
+  <a routerLink="/pfe/candidature" routerLinkActive="active">Candidature</a>
+</nav>
+
+<div class="pfe-content">
+  <router-outlet />
+</div>

@@ -1,0 +1,86 @@
+@if (loading()) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Chargement du tableau de bord…</p>
+  </div>
+} @else {
+  <div class="stats-grid">
+    <div class="stat-card stat-card--teal">
+      <div class="stat-card__icon">📋</div>
+      <div class="stat-card__body">
+        <span class="stat-card__value">{{ topics().length }}</span>
+        <span class="stat-card__label">Sujets PFE</span>
+      </div>
+      <span class="stat-card__badge">{{ openTopicsCount }} ouverts</span>
+    </div>
+
+    <div class="stat-card stat-card--blue">
+      <div class="stat-card__icon">🏗️</div>
+      <div class="stat-card__body">
+        <span class="stat-card__value">{{ projects().length }}</span>
+        <span class="stat-card__label">Projets réalisés</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-card--amber">
+      <div class="stat-card__icon">📨</div>
+      <div class="stat-card__body">
+        <span class="stat-card__value">{{ applications().length }}</span>
+        <span class="stat-card__label">Candidatures</span>
+      </div>
+      <span class="stat-card__badge">{{ pendingCount }} en attente</span>
+    </div>
+
+    <div class="stat-card stat-card--green">
+      <div class="stat-card__icon">✅</div>
+      <div class="stat-card__body">
+        <span class="stat-card__value">{{ acceptedCount }}</span>
+        <span class="stat-card__label">Acceptées</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="recent-section">
+    <h2>Candidatures récentes</h2>
+    @if (applications().length === 0) {
+      <p class="empty-state">Aucune candidature pour le moment.</p>
+    } @else {
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Candidat</th>
+              <th>Sujet</th>
+              <th>École</th>
+              <th>Statut</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (app of applications().slice(0, 5); track app.id) {
+              <tr>
+                <td>
+                  <strong>{{ app.fullName }}</strong>
+                  <span class="cell-sub">{{ app.email }}</span>
+                </td>
+                <td>{{ app.topicTitle }}</td>
+                <td>{{ app.school }}</td>
+                <td>
+                  <span class="status-badge" [class]="'status-badge--' + app.status.toLowerCase()">
+                    {{ statusLabel(app.status) }}
+                  </span>
+                </td>
+                <td>{{ app.submittedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      @if (applications().length > 5) {
+        <a routerLink="/admin/candidatures" class="btn btn-ghost see-all">
+          Voir toutes les candidatures →
+        </a>
+      }
+    }
+  </section>
+}

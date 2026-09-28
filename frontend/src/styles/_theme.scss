@@ -1,0 +1,45 @@
+:root {
+  --cf-navy: #0b1f3a;
+  --cf-navy-soft: #132d52;
+  --cf-teal: #0d9488;
+  --cf-teal-dark: #0f766e;
+  --cf-blue: #2563eb;
+  --cf-bg: #f1f5f9;
+  --cf-surface: #ffffff;
+  --cf-border: #e2e8f0;
+  --cf-text: #0f172a;
+  --cf-muted: #64748b;
+  --cf-success: #15803d;
+  --cf-error: #b91c1c;
+  --cf-radius: 12px;
+  --cf-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --cf-font: "DM Sans", "Segoe UI", sans-serif;
+}
+
+@mixin cf-card {
+  background: var(--cf-surface);
+  border: 1px solid var(--cf-border);
+  border-radius: var(--cf-radius);
+  box-shadow: var(--cf-shadow);
+}
+
+@mixin cf-input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+  font: inherit;
+  color: var(--cf-text);
+  background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:focus {
+    outline: none;
+    border-color: var(--cf-teal);
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+  }
+
+  &.invalid {
+    border-color: var(--cf-error);
+  }
+}

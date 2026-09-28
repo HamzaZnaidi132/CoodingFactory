@@ -1,0 +1,34 @@
+<a routerLink="/pfe/projets" class="back">← Retour aux projets</a>
+
+@if (loading()) {
+  <p class="muted">Chargement du projet...</p>
+} @else if (error()) {
+  <p class="error">{{ error() }}</p>
+} @else {
+  @if (project(); as p) {
+    <article class="detail">
+      <header>
+        <p class="year">{{ p.academicYear }}</p>
+        <h1>{{ p.title }}</h1>
+        <p class="student">{{ p.studentName }} · Clôture {{ p.completionDate | date: 'longDate' }}</p>
+      </header>
+
+      <section>
+        <h2>Résumé</h2>
+        <p>{{ p.summary }}</p>
+      </section>
+
+      <section>
+        <h2>Méthodologie</h2>
+        <p>{{ p.methodology }}</p>
+      </section>
+
+      <section>
+        <h2>Résultats</h2>
+        <p>{{ p.results }}</p>
+      </section>
+
+      <a routerLink="/pfe/candidature" class="btn btn-primary">Déposer ma candidature</a>
+    </article>
+  }
+}

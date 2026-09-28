@@ -1,0 +1,20 @@
+<header class="section-head">
+  <div>
+    <h2>Projets réalisés</h2>
+    <p>Espace de consultation réservé aux candidats : études de cas et retours d'expérience.</p>
+  </div>
+</header>
+
+<div class="project-grid">
+  @for (project of projects(); track project.id) {
+    <article class="project-card">
+      <p class="year">{{ project.academicYear }}</p>
+      <h3>{{ project.title }}</h3>
+      <p class="student">{{ project.studentName }}</p>
+      <p class="summary">{{ project.summary }}</p>
+      <a [routerLink]="['/pfe/projets', project.id]" class="link">Lire l'étude de cas →</a>
+    </article>
+  } @empty {
+    <p class="empty">Aucun projet publié pour le moment.</p>
+  }
+</div>

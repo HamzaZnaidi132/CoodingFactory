@@ -1,0 +1,125 @@
+<header class="section-head">
+  <div>
+    <h2>🤖 Recommandations IA</h2>
+    <p>Décrivez votre profil et laissez notre algorithme de Machine Learning vous recommander les sujets PFE les plus adaptés.</p>
+  </div>
+</header>
+
+<div class="reco-layout">
+  <form class="profile-form" [formGroup]="profileForm" (ngSubmit)="search()" novalidate>
+    <div class="form-card">
+      <h3>Votre profil</h3>
+
+      <div class="field">
+        <label for="r-skills">Compétences techniques</label>
+        <textarea
+          id="r-skills"
+          rows="3"
+          formControlName="skills"
+          placeholder="Ex: Java, Spring Boot, Angular, Python, Machine Learning, Docker…"
+          [class.invalid]="invalid('skills')"
+        ></textarea>
+        @if (invalid('skills')) {
+          <span class="field-error">Ce champ est obligatoire.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="r-interests">Centres d'intérêt / Domaines</label>
+        <textarea
+          id="r-interests"
+          rows="3"
+          formControlName="interests"
+          placeholder="Ex: Intelligence artificielle, développement web, DevOps, cybersécurité…"
+          [class.invalid]="invalid('interests')"
+        ></textarea>
+        @if (invalid('interests')) {
+          <span class="field-error">Ce champ est obligatoire.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="r-level">Niveau d'études</label>
+        <select id="r-level" formControlName="level" [class.invalid]="invalid('level')">
+          <option value="">— Choisir —</option>
+          @for (level of levelOptions; track level) {
+            <option [value]="level">{{ level }}</option>
+          }
+        </select>
+        @if (invalid('level')) {
+          <span class="field-error">Ce champ est obligatoire.</span>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full" [disabled]="loading()">
+        {{ loading() ? '🔄 Analyse en cours…' : '🔍 Trouver mes sujets idéaux' }}
+      </button>
+    </div>
+
+    <aside class="ml-info">
+      <div class="ml-badge">ML</div>
+      <h4>Comment ça marche ?</h4>
+      <ol>
+        <li>Notre algorithme analyse votre profil (compétences + intérêts).</li>
+        <li>Il vectorise vos données avec <strong>TF-IDF</strong>.</li>
+        <li>Il calcule la <strong>similarité cosinus</strong> avec chaque sujet ouvert.</li>
+        <li>Les sujets les plus pertinents sont classés par score.</li>
+      </ol>
+      <p class="hint">Plus votre description est détaillée, plus les recommandations seront précises !</p>
+    </aside>
+  </form>
+
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="ml-animation">
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring delay"></div>
+        <span class="ml-icon">🧠</span>
+      </div>
+      <p>Analyse de votre profil par notre modèle ML…</p>
+    </div>
+  }
+
+  @if (searched() && !loading()) {
+    <section class="results-section">
+      <h3>Résultats de recommandation</h3>
+      @if (recommendations().length === 0) {
+        <div class="no-results">
+          <p>Aucune correspondance trouvée. Essayez de détailler davantage vos compétences ou intérêts.</p>
+        </div>
+      } @else {
+        <div class="results-list">
+          @for (reco of recommendations(); track reco.topicId; let i = $index) {
+            <div class="reco-card" [style.animation-delay]="i * 0.1 + 's'">
+              <div class="reco-card__rank">#{{ i + 1 }}</div>
+              <div class="reco-card__content">
+                <div class="reco-card__header">
+                  <h4>{{ reco.topicTitle }}</h4>
+                  <div class="score-badge" [style.background]="scoreColor(reco.score) + '18'" [style.color]="scoreColor(reco.score)">
+                    {{ reco.score }}% match
+                  </div>
+                </div>
+                <div class="reco-card__meta">
+                  <span>🏷️ {{ reco.domain }}</span>
+                  <span>⚙️ {{ reco.technologies }}</span>
+                  <span>👤 {{ reco.supervisorName }}</span>
+                </div>
+                <div class="score-bar">
+                  <div class="score-bar__fill" [style.width]="reco.score + '%'" [style.background]="scoreColor(reco.score)"></div>
+                </div>
+                <div class="match-reasons">
+                  @for (reason of reco.matchReasons; track reason) {
+                    <span class="reason-tag">{{ reason }}</span>
+                  }
+                </div>
+                <a [routerLink]="['/pfe/candidature']" [queryParams]="{ topicId: reco.topicId }" class="btn btn-primary btn-sm">
+                  Postuler pour ce sujet →
+                </a>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+  }
+</div>

@@ -1,0 +1,92 @@
+<div class="section-header">
+  <h2>Projets réalisés</h2>
+  <button class="btn btn-primary" (click)="openCreateForm()" id="btn-add-project">
+    + Nouveau projet
+  </button>
+</div>
+
+@if (message()) {
+  <p class="alert success" role="status">{{ message() }}</p>
+}
+@if (error()) {
+  <p class="alert error" role="alert">{{ error() }}</p>
+}
+
+@if (showForm()) {
+  <div class="form-overlay" (click)="cancelForm()">
+    <div class="form-modal" (click)="$event.stopPropagation()">
+      <div class="form-modal__header">
+        <h3>{{ editing() ? 'Modifier le projet' : 'Nouveau projet réalisé' }}</h3>
+        <button class="close-btn" (click)="cancelForm()" aria-label="Fermer">✕</button>
+      </div>
+      <form [formGroup]="projectForm" (ngSubmit)="submitForm()" novalidate>
+        <div class="field">
+          <label for="p-title">Titre du projet *</label>
+          <input id="p-title" type="text" formControlName="title" [class.invalid]="invalid('title')" />
+        </div>
+        <div class="field-grid">
+          <div class="field">
+            <label for="p-studentName">Étudiant *</label>
+            <input id="p-studentName" type="text" formControlName="studentName" [class.invalid]="invalid('studentName')" />
+          </div>
+          <div class="field">
+            <label for="p-academicYear">Année académique *</label>
+            <input id="p-academicYear" type="text" formControlName="academicYear" placeholder="2024-2025" [class.invalid]="invalid('academicYear')" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="p-summary">Résumé *</label>
+          <textarea id="p-summary" rows="3" formControlName="summary" [class.invalid]="invalid('summary')"></textarea>
+        </div>
+        <div class="field">
+          <label for="p-methodology">Méthodologie *</label>
+          <textarea id="p-methodology" rows="3" formControlName="methodology" [class.invalid]="invalid('methodology')"></textarea>
+        </div>
+        <div class="field">
+          <label for="p-results">Résultats *</label>
+          <textarea id="p-results" rows="3" formControlName="results" [class.invalid]="invalid('results')"></textarea>
+        </div>
+        <div class="field" style="max-width: 240px">
+          <label for="p-completionDate">Date de soutenance *</label>
+          <input id="p-completionDate" type="date" formControlName="completionDate" [class.invalid]="invalid('completionDate')" />
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="cancelForm()">Annuler</button>
+          <button type="submit" class="btn btn-primary">
+            {{ editing() ? 'Enregistrer' : 'Créer le projet' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}
+
+@if (loading()) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Chargement…</p>
+  </div>
+} @else if (projects().length === 0) {
+  <div class="empty-state">
+    <p>Aucun projet réalisé pour le moment.</p>
+    <button class="btn btn-primary" (click)="openCreateForm()">Ajouter le premier projet</button>
+  </div>
+} @else {
+  <div class="cards-grid">
+    @for (project of projects(); track project.id) {
+      <div class="project-card">
+        <div class="project-card__header">
+          <span class="project-card__year">{{ project.academicYear }}</span>
+          <span class="project-card__date">{{ project.completionDate | date: 'dd/MM/yyyy' }}</span>
+        </div>
+        <h3 class="project-card__title">{{ project.title }}</h3>
+        <p class="project-card__student">👤 {{ project.studentName }}</p>
+        <p class="project-card__desc">{{ project.summary | slice:0:150 }}{{ project.summary.length > 150 ? '…' : '' }}</p>
+        <div class="project-card__actions">
+          <button class="btn btn-secondary btn-sm" (click)="openEditForm(project)">✏️ Modifier</button>
+          <button class="btn btn-danger btn-sm" (click)="deleteProject(project)">🗑️ Supprimer</button>
+        </div>
+      </div>
+    }
+  </div>
+}

@@ -1,0 +1,28 @@
+<section class="admin-hero">
+  <div class="admin-hero__content">
+    <p class="page-eyebrow">Panneau d'administration</p>
+    <h1 class="page-title">Gestion des PFE</h1>
+    <p class="page-lead">
+      Gérez les sujets, projets réalisés et candidatures depuis cet espace.
+    </p>
+  </div>
+</section>
+
+<nav class="admin-nav" aria-label="Navigation Admin">
+  <a routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <span class="nav-icon">📊</span> Tableau de bord
+  </a>
+  <a routerLink="/admin/sujets" routerLinkActive="active">
+    <span class="nav-icon">📋</span> Sujets PFE
+  </a>
+  <a routerLink="/admin/projets" routerLinkActive="active">
+    <span class="nav-icon">🏗️</span> Projets réalisés
+  </a>
+  <a routerLink="/admin/candidatures" routerLinkActive="active">
+    <span class="nav-icon">📨</span> Candidatures
+  </a>
+</nav>
+
+<div class="admin-content">
+  <router-outlet />
+</div>

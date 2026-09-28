@@ -1,0 +1,156 @@
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  background: var(--cf-navy);
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.topbar__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0.85rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: #fff;
+}
+
+.brand__mark {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #14b8a6, #0f766e);
+  font-size: 0.75rem;
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: #cbd5e1;
+  font-weight: 500;
+  font-size: 0.92rem;
+  padding: 0.35rem 0;
+  transition: color 0.2s ease;
+}
+
+nav a:hover {
+  color: #e2e8f0;
+}
+
+nav a.active {
+  color: #99f6e4;
+}
+
+main {
+  flex: 1;
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 2rem;
+}
+
+.footer {
+  border-top: 1px solid var(--cf-border);
+  background: #fff;
+  padding: 0.85rem 1.5rem;
+  text-align: center;
+  color: var(--cf-muted);
+  font-size: 0.85rem;
+}
+
+.footer p {
+  margin: 0;
+}
+
+// ── Role Toggle ──
+
+.role-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  cursor: pointer;
+  font: inherit;
+  color: #fff;
+  transition: all 0.25s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+}
+
+.role-toggle__icon {
+  font-size: 1rem;
+}
+
+.role-toggle__label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.role-toggle__switch {
+  width: 36px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  position: relative;
+  transition: background 0.3s ease;
+
+  &.admin {
+    background: linear-gradient(135deg, #14b8a6, #0f766e);
+  }
+}
+
+.role-toggle__dot {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 14px;
+  height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+
+  .admin & {
+    transform: translateX(16px);
+  }
+}
+
+@media (max-width: 720px) {
+  .topbar__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .role-toggle {
+    align-self: flex-end;
+  }
+}

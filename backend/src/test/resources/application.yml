@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: codingfactory-api-test
+
+codingfactory:
+  cors:
+    allowed-origins: http://localhost:4200
+  ollama:
+    enabled: false
+

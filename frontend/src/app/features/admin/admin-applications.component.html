@@ -1,0 +1,96 @@
+<div class="section-header">
+  <h2>Gestion des candidatures</h2>
+  <div class="filter-bar">
+    <button class="filter-btn" [class.active]="filter() === 'ALL'" (click)="setFilter('ALL')">
+      Toutes ({{ applications().length }})
+    </button>
+    <button class="filter-btn" [class.active]="filter() === 'RECEIVED'" (click)="setFilter('RECEIVED')">
+      🟡 En attente
+    </button>
+    <button class="filter-btn" [class.active]="filter() === 'ACCEPTED'" (click)="setFilter('ACCEPTED')">
+      🟢 Acceptées
+    </button>
+    <button class="filter-btn" [class.active]="filter() === 'REJECTED'" (click)="setFilter('REJECTED')">
+      🔴 Refusées
+    </button>
+  </div>
+</div>
+
+@if (message()) {
+  <p class="alert success" role="status">{{ message() }}</p>
+}
+@if (error()) {
+  <p class="alert error" role="alert">{{ error() }}</p>
+}
+
+@if (loading()) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Chargement des candidatures…</p>
+  </div>
+} @else if (filteredApplications.length === 0) {
+  <div class="empty-state">
+    <p>Aucune candidature{{ filter() !== 'ALL' ? ' avec ce filtre' : '' }}.</p>
+  </div>
+} @else {
+  <div class="applications-list">
+    @for (app of filteredApplications; track app.id) {
+      <div class="app-card" [class.expanded]="expandedId() === app.id">
+        <div class="app-card__header" (click)="toggleExpand(app.id)">
+          <div class="app-card__identity">
+            <div class="app-card__avatar">{{ app.fullName.charAt(0) }}</div>
+            <div>
+              <strong class="app-card__name">{{ app.fullName }}</strong>
+              <span class="app-card__email">{{ app.email }}</span>
+            </div>
+          </div>
+          <div class="app-card__topic">{{ app.topicTitle }}</div>
+          <div class="app-card__right">
+            <span class="status-badge" [class]="'status-badge--' + app.status.toLowerCase()">
+              {{ statusLabel(app.status) }}
+            </span>
+            <span class="app-card__date">{{ app.submittedAt | date: 'dd/MM/yyyy' }}</span>
+            <span class="expand-icon">{{ expandedId() === app.id ? '▲' : '▼' }}</span>
+          </div>
+        </div>
+
+        @if (expandedId() === app.id) {
+          <div class="app-card__body">
+            <div class="detail-grid">
+              <div class="detail-item">
+                <span class="detail-label">École</span>
+                <span class="detail-value">{{ app.school }}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Niveau</span>
+                <span class="detail-value">{{ app.level }}</span>
+              </div>
+              @if (app.portfolioUrl) {
+                <div class="detail-item">
+                  <span class="detail-label">Portfolio</span>
+                  <a [href]="app.portfolioUrl" target="_blank" rel="noopener" class="detail-value link">
+                    {{ app.portfolioUrl }}
+                  </a>
+                </div>
+              }
+            </div>
+            <div class="motivation-section">
+              <span class="detail-label">Motivation</span>
+              <p class="motivation-text">{{ app.motivation }}</p>
+            </div>
+            @if (app.status === 'RECEIVED' || app.status === 'UNDER_REVIEW') {
+              <div class="app-card__actions">
+                <button class="btn btn-accept" (click)="accept(app); $event.stopPropagation()">
+                  ✅ Accepter
+                </button>
+                <button class="btn btn-reject" (click)="reject(app); $event.stopPropagation()">
+                  ❌ Refuser
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+}

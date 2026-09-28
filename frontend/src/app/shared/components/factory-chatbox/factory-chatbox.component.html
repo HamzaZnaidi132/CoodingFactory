@@ -1,0 +1,69 @@
+<div class="chatbox-widget">
+  <button
+    type="button"
+    class="chatbox-toggle"
+    (click)="toggle()"
+    [class.open]="isOpen"
+    aria-label="Ouvrir FactoryBot"
+    title="FactoryBot — Assistant IA"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7v1h1a2 2 0 1 1 0 4h-1.1A7.002 7.002 0 0 1 5.1 19H4a2 2 0 1 1 0-4h1v-1a7 7 0 0 1 7-7h1V5.73A2 2 0 0 1 12 2Zm-3 9a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z"/></svg>
+  </button>
+
+  @if (isOpen) {
+    <div class="chatbox-panel">
+      <div class="chatbox-header">
+        <div>
+          <span class="chatbox-title">FactoryBot</span>
+          <span class="chatbox-subtitle">Assistant IA · {{ aiModel }}</span>
+        </div>
+        <div class="chatbox-actions">
+          <button type="button" class="icon-btn" (click)="clear()" title="Effacer">⌫</button>
+          <button type="button" class="icon-btn" (click)="close()" title="Fermer">✕</button>
+        </div>
+      </div>
+
+      <div class="chatbox-messages" #messagesEl>
+        @for (msg of messages; track msg.id) {
+          <div
+            class="chatbox-msg"
+            [class.user]="msg.role === 'user'"
+            [class.assistant]="msg.role === 'assistant'"
+          >
+            <span class="role">{{ msg.role === 'user' ? 'Vous' : 'FactoryBot' }}</span>
+            <div class="content">{{ msg.content }}</div>
+            @if (msg.serviceTitle) {
+              <span class="chip">Recommandation · {{ msg.serviceTitle }}</span>
+            }
+            @if (msg.aiPowered) {
+              <span class="chip ai">Réponse IA</span>
+            }
+          </div>
+        }
+        @if (loading) {
+          <div class="chatbox-msg assistant loading">
+            <span class="role">FactoryBot</span>
+            <div class="content"><span class="dots">Analyse en cours</span></div>
+          </div>
+        }
+      </div>
+
+      @if (errorMessage) {
+        <div class="chatbox-error">{{ errorMessage }}</div>
+      }
+
+      <div class="chatbox-input-wrap">
+        <textarea
+          rows="2"
+          [(ngModel)]="inputText"
+          (keydown.enter)="$event.preventDefault(); send()"
+          placeholder="Question consulting, formation, PFE..."
+          [disabled]="loading"
+        ></textarea>
+        <button type="button" class="send" (click)="send()" [disabled]="loading || !inputText.trim()">
+          ↑
+        </button>
+      </div>
+    </div>
+  }
+</div>
