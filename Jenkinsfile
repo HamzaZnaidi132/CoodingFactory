@@ -57,7 +57,23 @@ pipeline {
             steps {
                 script {
                     if (isUnix()) {
-                        sh 'cd frontend && npm ci && npm run test:ci && npm run build'
+                        sh '''
+                            set -eu
+                            if command -v google-chrome >/dev/null 2>&1; then
+                                export CHROME_BIN="$(command -v google-chrome)"
+                            elif command -v chromium >/dev/null 2>&1; then
+                                export CHROME_BIN="$(command -v chromium)"
+                            elif command -v chromium-browser >/dev/null 2>&1; then
+                                export CHROME_BIN="$(command -v chromium-browser)"
+                            else
+                                echo "Chrome ou Chromium est requis pour les tests Angular."
+                                exit 1
+                            fi
+                            cd frontend
+                            npm ci
+                            npm run test:ci
+                            npm run build
+                        '''
                     } else {
                         bat 'cd frontend && npm ci && npm run test:ci && npm run build'
                     }
