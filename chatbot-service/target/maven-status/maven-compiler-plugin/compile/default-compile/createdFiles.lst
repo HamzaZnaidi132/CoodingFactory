@@ -1,0 +1,8 @@
+com\codingfactory\chatbot\dto\ConsultingServiceDto.class
+com\codingfactory\chatbot\dto\ChatMessageRequest.class
+com\codingfactory\chatbot\ChatbotServiceApplication.class
+com\codingfactory\chatbot\service\ConsultingChatbotService.class
+com\codingfactory\chatbot\dto\ChatMessageResponse.class
+com\codingfactory\chatbot\web\OllamaStatusController.class
+com\codingfactory\chatbot\dto\ConversationTurnDto.class
+com\codingfactory\chatbot\web\ChatbotController.class

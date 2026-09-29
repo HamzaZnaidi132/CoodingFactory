@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      httpclient:
+        connect-timeout: 5000
+        response-timeout: 20s
+      routes:
+        - id: ollama-status
+          uri: ${CHATBOT_SERVICE_URI:http://127.0.0.1:8091}
+          predicates:
+            - Path=/api/v1/ollama/**
+        - id: chatbot-service
+          uri: ${CHATBOT_SERVICE_URI:http://127.0.0.1:8091}
+          predicates:
+            - Path=/api/v1/chatbot/**
+        - id: admin-pfe-service
+          uri: ${PFE_SERVICE_URI:http://127.0.0.1:8092}
+          predicates:
+            - Path=/api/v1/admin/pfe/**
+        - id: pfe-service
+          uri: ${PFE_SERVICE_URI:http://127.0.0.1:8092}
+          predicates:
+            - Path=/api/v1/pfe/**
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: ${CODINGFACTORY_CORS_ALLOWED_ORIGINS:http://localhost:4200,http://localhost,http://127.0.0.1:4200}
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+
+server:
+  port: ${SERVER_PORT:8090}
+
+eureka:
+  instance:
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
+    prefer-ip-address: ${EUREKA_INSTANCE_PREFER_IP_ADDRESS:false}
+    instance-id: ${spring.application.name}:${server.port}
+    non-secure-port: ${server.port}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://localhost:8761/eureka/}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
