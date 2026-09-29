@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        nodejs 'node20'
-    }
-
     options {
         timestamps()
         disableConcurrentBuilds()
@@ -53,34 +49,6 @@ pipeline {
             }
         }
 
-        stage('Frontend CI') {
-            steps {
-                script {
-                    if (isUnix()) {
-                        sh '''
-                            set -eu
-                            if command -v google-chrome >/dev/null 2>&1; then
-                                export CHROME_BIN="$(command -v google-chrome)"
-                            elif command -v chromium >/dev/null 2>&1; then
-                                export CHROME_BIN="$(command -v chromium)"
-                            elif command -v chromium-browser >/dev/null 2>&1; then
-                                export CHROME_BIN="$(command -v chromium-browser)"
-                            else
-                                echo "Chrome ou Chromium est requis pour les tests Angular."
-                                exit 1
-                            fi
-                            cd frontend
-                            npm ci
-                            npm run test:ci
-                            npm run build
-                        '''
-                    } else {
-                        bat 'cd frontend && npm ci && npm run test:ci && npm run build'
-                    }
-                }
-            }
-        }
-
         stage('CD - Build Docker images') {
             when {
                 branch 'main'
@@ -91,8 +59,7 @@ pipeline {
                         'eureka-server',
                         'chatbot-service',
                         'pfe-service',
-                        'api-gateway',
-                        'frontend'
+                        'api-gateway'
                     ]
 
                     imageNames.each { imageName ->
@@ -129,8 +96,7 @@ pipeline {
                             'eureka-server',
                             'chatbot-service',
                             'pfe-service',
-                            'api-gateway',
-                            'frontend'
+                            'api-gateway'
                         ]
 
                         if (isUnix()) {
@@ -155,7 +121,7 @@ pipeline {
     post {
         always {
             junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
-            archiveArtifacts allowEmptyArchive: true, artifacts: '**/target/*.jar,frontend/dist/**', fingerprint: true
+            archiveArtifacts allowEmptyArchive: true, artifacts: '**/target/*.jar', fingerprint: true
         }
         success {
             echo 'Pipeline CI/CD terminee avec succes.'

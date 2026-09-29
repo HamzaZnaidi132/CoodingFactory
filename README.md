@@ -89,9 +89,13 @@ Le workflow `.github/workflows/ci-cd.yml` exécute :
 
 ### Jenkins
 
-Le fichier [Jenkinsfile](Jenkinsfile) reprend ces étapes dans une pipeline
-Jenkins declarative. Configurez un agent avec Java 17, Maven, Node.js 20,
-ChromeHeadless et Docker, puis créez un job Pipeline depuis le dépôt SCM.
+Le fichier [Jenkinsfile](Jenkinsfile) exécute la pipeline backend Jenkins
+declarative. Configurez un agent avec Java 17, Maven et Docker, puis créez un
+job Pipeline depuis le dépôt SCM.
+
+La pipeline couvre `api-gateway`, `chatbot-service`, `eureka-server`,
+`pfe-service` et le projet parent `codingfactory-parent`. Le frontend Angular
+est volontairement exclu de cette pipeline.
 
 La CI s'exécute sur toutes les branches. La construction des images Docker
 s'exécute uniquement sur `main`. Pour publier les images, créez dans Jenkins
