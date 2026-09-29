@@ -51,6 +51,22 @@ npm start
 
 UI : `http://localhost:4200` (proxy API vers le gateway `:8090`)
 
+### Ollama et FactoryBot
+
+Installez Ollama, demarrez-le et telechargez le modele utilise par defaut :
+
+```powershell
+ollama serve
+ollama pull llama3.2
+```
+
+Pour un lancement local Maven, le chatbot utilise `http://localhost:11434`.
+Avec Docker Compose, il utilise automatiquement
+`http://host.docker.internal:11434` pour joindre Ollama installe sur la
+machine hote. Les variables `OLLAMA_ENABLED`, `OLLAMA_BASE_URL`,
+`OLLAMA_MODEL` et `OLLAMA_TEMPERATURE` permettent de personnaliser ce
+comportement.
+
 ## Tests
 
 ```bash

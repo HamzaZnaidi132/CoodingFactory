@@ -24,6 +24,12 @@ public class ConsultingChatbotService {
             new ConsultingServiceDto("custom-training", "Formation sur mesure", "Parcours adaptés aux équipes : développement, agile, cloud, data.", "formation@codingfactory.tn", "formation, training, équipe, upskilling")
     );
 
+    private final OllamaClient ollamaClient;
+
+    public ConsultingChatbotService(OllamaClient ollamaClient) {
+        this.ollamaClient = ollamaClient;
+    }
+
     public ChatMessageResponse handleMessage(ChatMessageRequest request) {
         String sessionId = request.sessionId() == null || request.sessionId().isBlank()
                 ? UUID.randomUUID().toString()
@@ -35,9 +41,14 @@ public class ConsultingChatbotService {
 
         List<ConsultingServiceDto> suggested = matches.isEmpty() ? services.subList(0, 2) : matches;
         ConsultingServiceDto primary = suggested.get(0);
-        String reply = matches.isEmpty()
+        String fallbackReply = matches.isEmpty()
                 ? "Je peux vous orienter vers les offres Cloud, Data, Cybersécurité, Transformation digitale ou Formation. Précisez votre besoin pour affiner."
                 : "Voici les services les plus proches de votre besoin : " + primary.title() + ". " + primary.description();
+        String serviceContext = suggested.stream()
+            .map(service -> service.title() + " : " + service.description())
+            .collect(java.util.stream.Collectors.joining(" | "));
+        String generatedReply = ollamaClient.generate(request.message(), request.history(), serviceContext);
+        String reply = generatedReply == null ? fallbackReply : generatedReply;
 
         return new ChatMessageResponse(
             sessionId,
@@ -45,7 +56,7 @@ public class ConsultingChatbotService {
             primary.code(),
             primary.title(),
             buildSuggestedQuestions(primary),
-            true,
+            generatedReply != null,
             "CodingFactory Assistant",
             suggested
         );
@@ -64,9 +75,9 @@ public class ConsultingChatbotService {
 
     public Map<String, Object> getAssistantStatus() {
         return Map.of(
-                "enabled", Boolean.parseBoolean(System.getenv().getOrDefault("OLLAMA_ENABLED", "true")),
-                "model", System.getenv().getOrDefault("OLLAMA_MODEL", "llama3.2"),
-                "baseUrl", System.getenv().getOrDefault("OLLAMA_BASE_URL", "http://localhost:11434")
+            "enabled", Boolean.parseBoolean(System.getenv().getOrDefault("OLLAMA_ENABLED", "true")),
+            "model", System.getenv().getOrDefault("OLLAMA_MODEL", "llama3.2"),
+            "baseUrl", System.getenv().getOrDefault("OLLAMA_BASE_URL", "http://localhost:11434")
         );
     }
 

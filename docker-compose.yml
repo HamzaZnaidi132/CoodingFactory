@@ -27,6 +27,9 @@ services:
       SERVER_PORT: "8091"
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:8761/eureka/"
       EUREKA_INSTANCE_HOSTNAME: chatbot-service
+      OLLAMA_ENABLED: "${OLLAMA_ENABLED:-true}"
+      OLLAMA_BASE_URL: "${OLLAMA_BASE_URL:-http://host.docker.internal:11434}"
+      OLLAMA_MODEL: "${OLLAMA_MODEL:-llama3.2}"
     depends_on:
       eureka-server:
         condition: service_healthy
