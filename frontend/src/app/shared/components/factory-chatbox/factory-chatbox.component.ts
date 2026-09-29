@@ -115,7 +115,7 @@ export class FactoryChatboxComponent implements AfterViewChecked {
       },
       error: () => {
         this.errorMessage =
-          'Assistant indisponible. Vérifiez le backend (8090) et Ollama (ollama serve + ollama pull llama3.2).';
+          'Assistant indisponible. Vérifiez le gateway (8090) et Ollama (ollama serve + ollama pull llama3.2).';
         this.loading = false;
         this.cdr.markForCheck();
       },

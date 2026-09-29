@@ -16,6 +16,8 @@ export class PfeTopicsComponent implements OnInit {
 
   readonly topics = signal<PfeTopic[]>([]);
   readonly showOpenOnly = signal(true);
+  readonly loading = signal(true);
+  readonly error = signal<string | null>(null);
 
   ngOnInit(): void {
     this.loadTopics();
@@ -27,6 +29,17 @@ export class PfeTopicsComponent implements OnInit {
   }
 
   private loadTopics(): void {
-    this.pfeService.listTopics(this.showOpenOnly()).subscribe((topics) => this.topics.set(topics));
+    this.loading.set(true);
+    this.error.set(null);
+    this.pfeService.listTopics(this.showOpenOnly()).subscribe({
+      next: (topics) => {
+        this.topics.set(topics);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set('Impossible de charger les sujets. Vérifiez que le service PFE est démarré.');
+        this.loading.set(false);
+      },
+    });
   }
 }

@@ -17,14 +17,15 @@ export interface ChatMessageResponse {
   suggestedQuestions: string[];
   aiPowered: boolean;
   assistantName: string;
+  suggestedServices?: ConsultingService[];
 }
 
 export interface ConsultingService {
-  id: number;
   code: string;
   title: string;
   description: string;
   contactEmail: string;
+  keywords: string;
 }
 
 export interface ChatUiMessage {

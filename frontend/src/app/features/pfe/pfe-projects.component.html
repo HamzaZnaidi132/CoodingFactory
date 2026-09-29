@@ -5,6 +5,12 @@
   </div>
 </header>
 
+@if (loading()) {
+  <p class="empty">Chargement des projets réalisés...</p>
+} @else if (error()) {
+  <p class="empty">{{ error() }}</p>
+}
+
 <div class="project-grid">
   @for (project of projects(); track project.id) {
     <article class="project-card">

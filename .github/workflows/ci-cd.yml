@@ -8,11 +8,8 @@ on:
 
 jobs:
   backend:
-    name: Backend (Spring Boot)
+    name: Microservices (Spring Boot)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -20,14 +17,10 @@ jobs:
           distribution: temurin
           java-version: "17"
           cache: maven
-      - name: Run unit & integration tests
-        run: mvn -B verify
-      - name: Upload JaCoCo report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-jacoco
-          path: backend/target/site/jacoco/
+      - name: Package all modules
+        run: mvn -B -DskipTests package
+      - name: Run tests
+        run: mvn -B test
 
   frontend:
     name: Frontend (Angular)
@@ -58,12 +51,30 @@ jobs:
       - uses: actions/checkout@v4
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Build backend image
+      - name: Build Eureka image
         uses: docker/build-push-action@v6
         with:
-          context: ./backend
+          context: ./eureka-server
           push: false
-          tags: codingfactory-backend:latest
+          tags: codingfactory-eureka:latest
+      - name: Build chatbot image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./chatbot-service
+          push: false
+          tags: codingfactory-chatbot:latest
+      - name: Build PFE image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./pfe-service
+          push: false
+          tags: codingfactory-pfe:latest
+      - name: Build gateway image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./api-gateway
+          push: false
+          tags: codingfactory-gateway:latest
       - name: Build frontend image
         uses: docker/build-push-action@v6
         with:

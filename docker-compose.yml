@@ -1,26 +1,97 @@
 services:
-  backend:
+  eureka-server:
     build:
-      context: ./backend
-    container_name: codingfactory-backend
+      context: ./eureka-server
+    container_name: codingfactory-eureka
+    hostname: eureka-server
     ports:
-      - "8090:8080"
+      - "${EUREKA_HOST_PORT:-8761}:8761"
     environment:
-      SERVER_PORT: "8080"
-      CODINGFACTORY_CORS_ALLOWED_ORIGINS: http://localhost:4200,http://localhost
+      SERVER_PORT: "8761"
+      EUREKA_INSTANCE_HOSTNAME: eureka-server
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8761/actuator/health || exit 1"]
       interval: 10s
       timeout: 5s
-      retries: 5
-      start_period: 30s
+      retries: 12
+      start_period: 90s
+
+  chatbot-service:
+    build:
+      context: ./chatbot-service
+    container_name: codingfactory-chatbot
+    hostname: chatbot-service
+    ports:
+      - "${CHATBOT_HOST_PORT:-8091}:8091"
+    environment:
+      SERVER_PORT: "8091"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:8761/eureka/"
+      EUREKA_INSTANCE_HOSTNAME: chatbot-service
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8091/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 90s
+
+  pfe-service:
+    build:
+      context: ./pfe-service
+    container_name: codingfactory-pfe
+    hostname: pfe-service
+    ports:
+      - "${PFE_HOST_PORT:-8092}:8092"
+    environment:
+      SERVER_PORT: "8092"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:8761/eureka/"
+      EUREKA_INSTANCE_HOSTNAME: pfe-service
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8092/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 90s
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: codingfactory-gateway
+    hostname: api-gateway
+    ports:
+      - "${GATEWAY_HOST_PORT:-8090}:8090"
+    environment:
+      SERVER_PORT: "8090"
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eureka-server:8761/eureka/"
+      EUREKA_INSTANCE_HOSTNAME: api-gateway
+      CHATBOT_SERVICE_URI: "http://chatbot-service:8091"
+      PFE_SERVICE_URI: "http://pfe-service:8092"
+      CODINGFACTORY_CORS_ALLOWED_ORIGINS: http://localhost:4200,http://localhost,http://127.0.0.1:4200
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      chatbot-service:
+        condition: service_healthy
+      pfe-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8090/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 90s
 
   frontend:
     build:
       context: ./frontend
     container_name: codingfactory-frontend
     ports:
-      - "80:80"
+      - "${FRONTEND_HOST_PORT:-8088}:80"
     depends_on:
-      backend:
+      api-gateway:
         condition: service_healthy

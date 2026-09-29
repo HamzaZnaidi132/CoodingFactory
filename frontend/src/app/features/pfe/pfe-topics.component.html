@@ -13,6 +13,12 @@
   </div>
 </header>
 
+@if (loading()) {
+  <p class="empty">Chargement des sujets...</p>
+} @else if (error()) {
+  <p class="empty">{{ error() }}</p>
+}
+
 <div class="topic-list">
   @for (topic of topics(); track topic.id) {
     <article class="topic-card">
