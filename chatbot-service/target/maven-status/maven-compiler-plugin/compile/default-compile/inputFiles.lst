@@ -1,9 +1,9 @@
-C:\Users\CBE\Projects\codingfactory\chatbot-service\src\main\java\com\codingfactory\chatbot\dto\ConversationTurnDto.java
-C:\Users\CBE\Projects\codingfactory\chatbot-service\src\main\java\com\codingfactory\chatbot\dto\ConsultingServiceDto.java
-C:\Users\CBE\Projects\codingfactory\chatbot-service\src\main\java\com\codingfactory\chatbot\dto\ChatMessageResponse.java
-C:\Users\CBE\Projects\codingfactory\chatbot-service\src\main\java\com\codingfactory\chatbot\web\ChatbotController.java
-C:\Users\CBE\Projects\codingfactory\chatbot-service\src\main\java\com\codingfactory\chatbot\ChatbotServiceApplication.java
-C:\Users\CBE\Projects\codingfactory\chatbot-service\src\main\java\com\codingfactory\chatbot\web\OllamaStatusController.java
-C:\Users\CBE\Projects\codingfactory\chatbot-service\src\main\java\com\codingfactory\chatbot\dto\ChatMessageRequest.java
-C:\Users\CBE\Projects\codingfactory\chatbot-service\src\main\java\com\codingfactory\chatbot\service\ConsultingChatbotService.java
-C:\Users\CBE\Projects\codingfactory\chatbot-service\src\main\java\com\codingfactory\chatbot\service\OllamaClient.java
+C:\Users\CBE\Desktop\coodingFactory Latest\CoodingFactory\chatbot-service\src\main\java\com\codingfactory\chatbot\dto\ChatMessageRequest.java
+C:\Users\CBE\Desktop\coodingFactory Latest\CoodingFactory\chatbot-service\src\main\java\com\codingfactory\chatbot\service\ConsultingChatbotService.java
+C:\Users\CBE\Desktop\coodingFactory Latest\CoodingFactory\chatbot-service\src\main\java\com\codingfactory\chatbot\web\ChatbotController.java
+C:\Users\CBE\Desktop\coodingFactory Latest\CoodingFactory\chatbot-service\src\main\java\com\codingfactory\chatbot\service\OllamaClient.java
+C:\Users\CBE\Desktop\coodingFactory Latest\CoodingFactory\chatbot-service\src\main\java\com\codingfactory\chatbot\ChatbotServiceApplication.java
+C:\Users\CBE\Desktop\coodingFactory Latest\CoodingFactory\chatbot-service\src\main\java\com\codingfactory\chatbot\dto\ChatMessageResponse.java
+C:\Users\CBE\Desktop\coodingFactory Latest\CoodingFactory\chatbot-service\src\main\java\com\codingfactory\chatbot\dto\ConsultingServiceDto.java
+C:\Users\CBE\Desktop\coodingFactory Latest\CoodingFactory\chatbot-service\src\main\java\com\codingfactory\chatbot\dto\ConversationTurnDto.java
+C:\Users\CBE\Desktop\coodingFactory Latest\CoodingFactory\chatbot-service\src\main\java\com\codingfactory\chatbot\web\OllamaStatusController.java
